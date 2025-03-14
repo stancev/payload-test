@@ -60,6 +60,14 @@ RUN chown nextjs:nodejs .next
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# Copy the entrypoint script into the container
+COPY entrypoint.sh /entrypoint.sh
+# Make sure the script is executable
+RUN chmod +x /entrypoint.sh
+
+# Set the entrypoint to run the script before starting the server
+ENTRYPOINT ["/entrypoint.sh"]
+
 USER nextjs
 
 EXPOSE 3000
